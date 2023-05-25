@@ -1,0 +1,69 @@
+pipeline{
+    agent any
+    environment{
+        name='hitachi'
+    }
+      parameters{
+                    string(name :'person' ,defaultValue: 'hitachi System',description: 'hi my name is hitachi')
+                    booleanParam(name :'isMale' ,defaultValue: 'true',description: '')
+                    choice(name :'city' ,choices: ['mumbai','pune','nashik','bid'],description: '')
+                }
+        stages{
+            stage('environment veriable'){
+                environment{
+                    username='hitachi'
+                }
+              
+                steps{
+                    sh 'echo "${BUILD_ID}"'
+                    sh 'echo "${name}"'
+                    sh 'echo "${person}"'
+                    sh 'echo "${isMale}"'
+                    sh 'echo "${city}"'
+                    
+                }
+            }
+            stage('Parameters'){
+                steps{
+                    echo 'deploy on test'
+                    sh 'echo "${person}"'
+                }
+            }
+            stage('Continue ?'){
+                input{
+                    message "Shouls we continue?"
+                    ok "Ys we Should"
+                }
+                steps{
+                    echo "Build"
+                }
+            }
+            stage('run command'){
+                steps{
+                    sh '''
+                    ls
+                    date
+                    pwd
+                    cal 2023
+                    '''
+                }
+            }
+            stage('Deploy'){
+                steps{
+                    echo "Deploy"
+                }
+            }
+            
+        }
+    post{
+        always{
+            echo "123"
+        }
+        failure{
+            echo "failure"
+        }
+        success{
+            echo "success"
+        }
+    }
+}
